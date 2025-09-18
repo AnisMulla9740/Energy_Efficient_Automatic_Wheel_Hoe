@@ -1,0 +1,5 @@
+../Core/Src/msp.c:10:6:HAL_MspInit	16	static
+../Core/Src/msp.c:19:6:HAL_TIM_Encoder_MspInit	40	static
+../Core/Src/msp.c:41:6:HAL_TIM_PWM_MspInit	40	static
+../Core/Src/msp.c:63:6:HAL_ADC_MspInit	40	static
+../Core/Src/msp.c:83:6:HAL_UART_MspInit	40	static

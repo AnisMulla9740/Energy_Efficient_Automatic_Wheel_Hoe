@@ -1,0 +1,275 @@
+/*
+ * main.c
+ *
+ *  Created on: Sep 13, 2025
+ *      Author: Anis
+ */
+
+
+#include "main.h"
+
+void Error_Handler(void);
+void SystemClock_Config(void);
+
+/* Peripheral handles */
+ADC_HandleTypeDef hadc1;
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim4;
+UART_HandleTypeDef huart2;
+
+
+/*Redirect printf to UART2 */
+int _write(int file, char *ptr, int len)
+{
+	HAL_UART_Transmit(&huart2, (uint8_t*)ptr, len, HAL_MAX_DELAY);
+	return len;
+}
+
+int main(void)
+{
+	HAL_Init();
+	SystemClock_Config();
+
+	/*Peripheral Init */
+	MX_GPIO_Init();
+    MX_ADC1_Init();
+    MX_TIM2_Init();
+    MX_TIM4_Init();
+    MX_USART2_UART_Init();
+
+    /* Start Peripherals */
+    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+    HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+
+    printf("PWM Test Start\r\n");
+    //printf("PWM + ADC + Encoder Test Start \r\n");
+    while(1)
+    {
+    	/* Ramp up PWM duty cycle (0-100%) */
+    	for(uint16_t duty = 0; duty <= 100; duty += 10)
+    	{
+    		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, duty);			//set CCR1
+    		printf("PWM Duty = %u%%\r\n", duty);
+    		HAL_Delay(1000);
+    	}
+
+    	/* Ramp down PWM duty cycle (100-0%) */
+    	for(uint16_t duty = 100; duty >= 0; duty -= 10)
+    	{
+    		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, duty);
+    		printf("PWM Duty = %u%%\r\n", duty);
+    		HAL_Delay(1000);
+    	}
+    }
+
+//    while(1)
+//    {
+//    	 /* ----Read Throttle via ADC-------*/
+//    	HAL_ADC_Start(&hadc1);
+//
+//    	if(HAL_ADC_PollForConversion(&hadc1, 10) == HAL_OK)
+//    	{
+//    		uint16_t raw = HAL_ADC_GetValue(&hadc1);			//12-bit value (0-4095)
+//
+//    		/* Map ADC 0-4095 -> PWM duty 0-100 */
+//    		uint16_t duty = (raw * 100) / 4095;
+//    		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, duty);
+//
+//    		printf("Throttle = %u Duty = %u%%\r\n", raw, duty);
+//    	}
+//
+//        /* ---- Read Encoder Count ---- */
+//        uint16_t encoder_count = __HAL_TIM_GET_COUNTER(&htim2);
+//        printf("Encoder Count=%u\r\n", encoder_count);
+//
+//        HAL_Delay(200);
+//    }
+}
+
+
+/* ----------------------- Peripheral init functions -------------------------------- */
+
+void MX_ADC1_Init(void)
+{
+    __HAL_RCC_ADC1_CLK_ENABLE();
+
+    hadc1.Instance = ADC1;
+    hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+    hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+    hadc1.Init.ScanConvMode = DISABLE;
+    hadc1.Init.ContinuousConvMode = DISABLE;
+    hadc1.Init.DiscontinuousConvMode = DISABLE;
+    hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    hadc1.Init.NbrOfConversion = 1;
+    hadc1.Init.DMAContinuousRequests = DISABLE;
+    hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+
+    if (HAL_ADC_Init(&hadc1) != HAL_OK)
+    {
+    	Error_Handler();
+    }
+
+    ADC_ChannelConfTypeDef sConfig = {0};
+    sConfig.Channel = ADC_CHANNEL_4; // PA4
+    sConfig.Rank = 1;
+    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+
+    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+    {
+    	Error_Handler();
+    }
+}
+
+
+
+void MX_GPIO_Init(void)
+{
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+
+	GPIO_InitTypeDef gpio = {0};
+
+	/*
+	 *  PA8 = DIR, PA9 = EN (for Cytron Driver)
+	 */
+	gpio.Pin = GPIO_PIN_8 | GPIO_PIN_9;
+	gpio.Mode = GPIO_MODE_OUTPUT_PP;
+	gpio.Pull = GPIO_NOPULL;
+	gpio.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOA, &gpio);
+
+	/* Set default direction = forward, EN = HIGH */
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);		//DIR = 0
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);			//EN = 1
+}
+
+void MX_TIM2_Init(void)
+{
+    __HAL_RCC_TIM2_CLK_ENABLE();
+
+    TIM_Encoder_InitTypeDef sConfig = {0};
+    TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+    htim2.Instance = TIM2;
+    htim2.Init.Prescaler = 0;
+    htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim2.Init.Period = 0xFFFF;
+    htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+
+    sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
+    sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+    sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+    sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+    sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+
+    if (HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
+    {
+    	Error_Handler();
+    }
+
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+    {
+    	Error_Handler();
+    }
+}
+
+void MX_TIM4_Init(void)
+{
+	__HAL_RCC_TIM4_CLK_ENABLE();
+
+	TIM_OC_InitTypeDef sConfigOC = {0};
+
+	htim4.Instance = TIM4;
+	htim4.Init.Prescaler = 83;					// 84 MHz/84 = 1 MHz
+	htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim4.Init.Period = 100;
+	htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+
+	if(HAL_TIM_PWM_Init(&htim4) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	sConfigOC.OCMode = TIM_OCMODE_PWM1;
+	sConfigOC.Pulse = 0;
+	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+
+	if(HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+	{
+		Error_Handler();
+	}
+}
+
+void MX_USART2_UART_Init(void)
+{
+    __HAL_RCC_USART2_CLK_ENABLE();
+
+    huart2.Instance = USART2;
+    huart2.Init.BaudRate = 115200;
+    huart2.Init.WordLength = UART_WORDLENGTH_8B;
+    huart2.Init.StopBits = UART_STOPBITS_1;
+    huart2.Init.Parity = UART_PARITY_NONE;
+    huart2.Init.Mode = UART_MODE_TX_RX;
+    huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    if (HAL_UART_Init(&huart2) != HAL_OK) Error_Handler();
+}
+
+void SystemClock_Config(void)
+{
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+    /* Enable Power Control clock */
+    __HAL_RCC_PWR_CLK_ENABLE();
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
+
+    /* Configure main PLL clock source = HSE (8 MHz crystal) */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+
+    /* PLL settings:
+     * HSE = 8 MHz
+     * PLLM = 8   → 1 MHz
+     * PLLN = 336 → 336 MHz
+     * PLLP = 4   → 84 MHz SYSCLK
+     * PLLQ = 7   → 48 MHz USB/SDIO
+     */
+    RCC_OscInitStruct.PLL.PLLM = 8;
+    RCC_OscInitStruct.PLL.PLLN = 336;
+    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
+    RCC_OscInitStruct.PLL.PLLQ = 7;
+
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+        Error_Handler();
+    }
+
+    /* Configure CPU, AHB and APB clocks */
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK |
+                                  RCC_CLOCKTYPE_HCLK   |
+                                  RCC_CLOCKTYPE_PCLK1  |
+                                  RCC_CLOCKTYPE_PCLK2;
+
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK; // 84 MHz
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;        // HCLK = 84 MHz
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;         // APB1 = 42 MHz
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;         // APB2 = 84 MHz
+
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
+        Error_Handler();
+    }
+}
+
+
+void Error_Handler(void)
+{
+    //__disable_irq();
+    while (1);
+}

@@ -1,0 +1,13 @@
+/*
+ * stm32f4xx_hal_conf.h
+ *
+ *  Created on: Sep 13, 2025
+ *      Author: Anis
+ */
+
+#ifndef INC_STM32F4XX_HAL_CONF_H_
+#define INC_STM32F4XX_HAL_CONF_H_
+
+
+
+#endif /* INC_STM32F4XX_HAL_CONF_H_ */
