@@ -61,4 +61,3 @@ The following components are currently under development:
 
 ---
 
-## Repository Structure
