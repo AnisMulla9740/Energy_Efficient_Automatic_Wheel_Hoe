@@ -60,6 +60,30 @@ The **Energy Efficient Automatic Wheel Hoe** automates the weeding and hoeing pr
 
 ---
 
+## 📁 Project Structure
+Energy_Efficient_Automatic_Wheel_Hoe/
+│
+├── Core/                        # Main application source & headers
+│   └── Src/                     # main.c — master switch, speed logic,
+│                                #   LCD, LED, fan, battery monitor
+│
+├── Drivers/                     # STM32 HAL & BSP drivers
+│
+├── Middlewares/
+│   └── ST/STM32_USB_Host_Library/   # USB Host middleware (CDC class)
+│
+├── USB_HOST/                    # USB Host application layer
+│
+├── Debug/                       # Build output (debug binaries)
+│
+├── Current_Sensor.ioc           # STM32CubeMX project configuration
+├── STM32F407VGTX_FLASH.ld       # Linker script (Flash)
+├── STM32F407VGTX_RAM.ld         # Linker script (RAM)
+├── .cproject                    # Eclipse/STM32CubeIDE project file
+└── .project                     # Eclipse project descriptor
+
+---
+
 ## ⚡ Peripherals & Configuration
 
 ### Clock
