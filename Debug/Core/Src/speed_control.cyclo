@@ -1,0 +1,4 @@
+../Core/Src/speed_control.c:14:6:SpeedControl_Init	1
+../Core/Src/speed_control.c:39:6:SpeedControl_Process	1
+../Core/Src/speed_control.c:61:6:SpeedControl_UpdateLEDs	1
+../Core/Src/speed_control.c:70:13:SpeedControl_HandleButtons	7

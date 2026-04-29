@@ -1,0 +1,3 @@
+../Core/Src/power_control.c:18:6:PowerControl_Init	1
+../Core/Src/power_control.c:32:15:PowerControl_Check	2
+../Core/Src/power_control.c:43:6:PowerControl_Process	1
