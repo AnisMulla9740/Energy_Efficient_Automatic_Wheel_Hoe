@@ -35,7 +35,6 @@ The **Energy Efficient Automatic Wheel Hoe** automates the weeding and hoeing pr
 - 📊 **Current Sensing** — ADC1 (12-bit, PA0) monitors motor current for energy efficiency
 - 🎛️ **PWM Motor Control** — TIM3 CH1 generates PWM to drive the motor at the selected speed step
 - 📡 **UART2 Serial Communication** — Debugging and data logging via serial terminal
-- 🔌 **USB Host CDC** — USB-based communication/data logging
 - 🕐 **SysTick-based** real-time timing for switch debounce and periodic tasks
 
 ---
