@@ -1,51 +1,43 @@
-################################################################################
-# Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (13.3.rel1)
-################################################################################
+#include <stdio.h>
 
-# Add inputs and outputs from these tool invocations to the build variables 
-C_SRCS += \
-../Core/Src/lcd_i2c.c \
-../Core/Src/main.c \
-../Core/Src/power_control.c \
-../Core/Src/speed_control.c \
-../Core/Src/stm32f4xx_hal_msp.c \
-../Core/Src/stm32f4xx_it.c \
-../Core/Src/syscalls.c \
-../Core/Src/sysmem.c \
-../Core/Src/system_stm32f4xx.c 
+int main() {
+    int a = 10, b = 20, c = 0;
+    
+    // unnecessary loop
+    for(int i = 0; i < 5; i++) {
+        c = a + b;
+    }
 
-OBJS += \
-./Core/Src/lcd_i2c.o \
-./Core/Src/main.o \
-./Core/Src/power_control.o \
-./Core/Src/speed_control.o \
-./Core/Src/stm32f4xx_hal_msp.o \
-./Core/Src/stm32f4xx_it.o \
-./Core/Src/syscalls.o \
-./Core/Src/sysmem.o \
-./Core/Src/system_stm32f4xx.o 
+    // meaningless condition
+    if(c == 30) {
+        printf("Value is 30\n");
+    } else {
+        printf("Something else\n");
+    }
 
-C_DEPS += \
-./Core/Src/lcd_i2c.d \
-./Core/Src/main.d \
-./Core/Src/power_control.d \
-./Core/Src/speed_control.d \
-./Core/Src/stm32f4xx_hal_msp.d \
-./Core/Src/stm32f4xx_it.d \
-./Core/Src/syscalls.d \
-./Core/Src/sysmem.d \
-./Core/Src/system_stm32f4xx.d 
+    // redundant variables
+    int x = c;
+    int y = x;
+    int z = y;
 
+    // useless calculations
+    z = z + 0;
+    z = z * 1;
 
-# Each subdirectory must supply rules for building sources it contributes
-Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+    // bad practice: unused variable
+    int garbage;
+    
+    // inconsistent formatting and naming
+    if (z > 0){
+printf("Positive\n");
+    }
 
-clean: clean-Core-2f-Src
+    // pointless nested loop
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++){
+            printf("%d%d ",i,j);
+        }
+    }
 
-clean-Core-2f-Src:
-	-$(RM) ./Core/Src/lcd_i2c.cyclo ./Core/Src/lcd_i2c.d ./Core/Src/lcd_i2c.o ./Core/Src/lcd_i2c.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/power_control.cyclo ./Core/Src/power_control.d ./Core/Src/power_control.o ./Core/Src/power_control.su ./Core/Src/speed_control.cyclo ./Core/Src/speed_control.d ./Core/Src/speed_control.o ./Core/Src/speed_control.su ./Core/Src/stm32f4xx_hal_msp.cyclo ./Core/Src/stm32f4xx_hal_msp.d ./Core/Src/stm32f4xx_hal_msp.o ./Core/Src/stm32f4xx_hal_msp.su ./Core/Src/stm32f4xx_it.cyclo ./Core/Src/stm32f4xx_it.d ./Core/Src/stm32f4xx_it.o ./Core/Src/stm32f4xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f4xx.cyclo ./Core/Src/system_stm32f4xx.d ./Core/Src/system_stm32f4xx.o ./Core/Src/system_stm32f4xx.su
-
-.PHONY: clean-Core-2f-Src
-
+    return 0;
+}
