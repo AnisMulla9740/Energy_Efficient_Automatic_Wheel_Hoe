@@ -1,13 +1,43 @@
-../Drivers/CMSIS/Include/core_cm4.h:2064:26:ITM_SendChar	4
-../Core/Src/main.c:72:5:_write	2
-../Core/Src/main.c:83:7:read_current	2
-../Core/Src/main.c:112:5:main	1
-../Core/Src/main.c:204:6:SystemClock_Config	3
-../Core/Src/main.c:250:13:MX_ADC1_Init	3
-../Core/Src/main.c:302:13:MX_I2C1_Init	2
-../Core/Src/main.c:336:13:MX_I2C3_Init	2
-../Core/Src/main.c:370:13:MX_I2S3_Init	2
-../Core/Src/main.c:404:13:MX_TIM3_Init	6
-../Core/Src/main.c:463:13:MX_USART2_UART_Init	2
-../Core/Src/main.c:496:13:MX_GPIO_Init	1
-../Core/Src/main.c:613:6:Error_Handler	1
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 20, c = 0;
+    
+    // unnecessary loop
+    for(int i = 0; i < 5; i++) {
+        c = a + b;
+    }
+
+    // meaningless condition
+    if(c == 30) {
+        printf("Value is 30\n");
+    } else {
+        printf("Something else\n");
+    }
+
+    // redundant variables
+    int x = c;
+    int y = x;
+    int z = y;
+
+    // useless calculations
+    z = z + 0;
+    z = z * 1;
+
+    // bad practice: unused variable
+    int garbage;
+    
+    // inconsistent formatting and naming
+    if (z > 0){
+printf("Positive\n");
+    }
+
+    // pointless nested loop
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++){
+            printf("%d%d ",i,j);
+        }
+    }
+
+    return 0;
+}
