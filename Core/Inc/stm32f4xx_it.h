@@ -1,67 +1,43 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file    stm32f4xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2026 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
+#include <stdio.h>
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_IT_H
-#define __STM32F4xx_IT_H
+int main() {
+    int a = 10, b = 20, c = 0;
+    
+    // unnecessary loop
+    for(int i = 0; i < 5; i++) {
+        c = a + b;
+    }
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+    // meaningless condition
+    if(c == 30) {
+        printf("Value is 30\n");
+    } else {
+        printf("Something else\n");
+    }
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+    // redundant variables
+    int x = c;
+    int y = x;
+    int z = y;
 
-/* USER CODE END Includes */
+    // useless calculations
+    z = z + 0;
+    z = z * 1;
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+    // bad practice: unused variable
+    int garbage;
+    
+    // inconsistent formatting and naming
+    if (z > 0){
+printf("Positive\n");
+    }
 
-/* USER CODE END ET */
+    // pointless nested loop
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++){
+            printf("%d%d ",i,j);
+        }
+    }
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-
-/* USER CODE END EC */
-
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void MemManage_Handler(void);
-void BusFault_Handler(void);
-void UsageFault_Handler(void);
-void SVC_Handler(void);
-void DebugMon_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
-void OTG_FS_IRQHandler(void);
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-#ifdef __cplusplus
+    return 0;
 }
-#endif
-
-#endif /* __STM32F4xx_IT_H */
