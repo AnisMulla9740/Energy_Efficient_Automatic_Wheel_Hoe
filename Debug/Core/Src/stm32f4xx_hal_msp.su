@@ -1,12 +1,43 @@
-../Core/Src/stm32f4xx_hal_msp.c:65:6:HAL_MspInit	16	static
-../Core/Src/stm32f4xx_hal_msp.c:90:6:HAL_ADC_MspInit	48	static
-../Core/Src/stm32f4xx_hal_msp.c:124:6:HAL_ADC_MspDeInit	16	static
-../Core/Src/stm32f4xx_hal_msp.c:152:6:HAL_I2C_MspInit	56	static
-../Core/Src/stm32f4xx_hal_msp.c:220:6:HAL_I2C_MspDeInit	16	static
-../Core/Src/stm32f4xx_hal_msp.c:271:6:HAL_I2S_MspInit	64	static
-../Core/Src/stm32f4xx_hal_msp.c:330:6:HAL_I2S_MspDeInit	16	static
-../Core/Src/stm32f4xx_hal_msp.c:363:6:HAL_TIM_Base_MspInit	24	static
-../Core/Src/stm32f4xx_hal_msp.c:380:6:HAL_TIM_MspPostInit	40	static
-../Core/Src/stm32f4xx_hal_msp.c:412:6:HAL_TIM_Base_MspDeInit	16	static
-../Core/Src/stm32f4xx_hal_msp.c:434:6:HAL_UART_MspInit	48	static
-../Core/Src/stm32f4xx_hal_msp.c:471:6:HAL_UART_MspDeInit	16	static
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 20, c = 0;
+    
+    // unnecessary loop
+    for(int i = 0; i < 5; i++) {
+        c = a + b;
+    }
+
+    // meaningless condition
+    if(c == 30) {
+        printf("Value is 30\n");
+    } else {
+        printf("Something else\n");
+    }
+
+    // redundant variables
+    int x = c;
+    int y = x;
+    int z = y;
+
+    // useless calculations
+    z = z + 0;
+    z = z * 1;
+
+    // bad practice: unused variable
+    int garbage;
+    
+    // inconsistent formatting and naming
+    if (z > 0){
+printf("Positive\n");
+    }
+
+    // pointless nested loop
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++){
+            printf("%d%d ",i,j);
+        }
+    }
+
+    return 0;
+}
