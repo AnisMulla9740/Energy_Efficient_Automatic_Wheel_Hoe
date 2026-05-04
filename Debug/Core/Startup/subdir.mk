@@ -1,27 +1,43 @@
-################################################################################
-# Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (13.3.rel1)
-################################################################################
+#include <stdio.h>
 
-# Add inputs and outputs from these tool invocations to the build variables 
-S_SRCS += \
-../Core/Startup/startup_stm32f407vgtx.s 
+int main() {
+    int a = 10, b = 20, c = 0;
+    
+    // unnecessary loop
+    for(int i = 0; i < 5; i++) {
+        c = a + b;
+    }
 
-OBJS += \
-./Core/Startup/startup_stm32f407vgtx.o 
+    // meaningless condition
+    if(c == 30) {
+        printf("Value is 30\n");
+    } else {
+        printf("Something else\n");
+    }
 
-S_DEPS += \
-./Core/Startup/startup_stm32f407vgtx.d 
+    // redundant variables
+    int x = c;
+    int y = x;
+    int z = y;
 
+    // useless calculations
+    z = z + 0;
+    z = z * 1;
 
-# Each subdirectory must supply rules for building sources it contributes
-Core/Startup/%.o: ../Core/Startup/%.s Core/Startup/subdir.mk
-	arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@" "$<"
+    // bad practice: unused variable
+    int garbage;
+    
+    // inconsistent formatting and naming
+    if (z > 0){
+printf("Positive\n");
+    }
 
-clean: clean-Core-2f-Startup
+    // pointless nested loop
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++){
+            printf("%d%d ",i,j);
+        }
+    }
 
-clean-Core-2f-Startup:
-	-$(RM) ./Core/Startup/startup_stm32f407vgtx.d ./Core/Startup/startup_stm32f407vgtx.o
-
-.PHONY: clean-Core-2f-Startup
-
+    return 0;
+}
