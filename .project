@@ -1,32 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<projectDescription>
-	<name>Current_Sensor</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
-			<triggers>clean,full,incremental,</triggers>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
-			<triggers>full,incremental,</triggers>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<natures>
-		<nature>com.st.stm32cube.ide.mcu.MCUProjectNature</nature>
-		<nature>com.st.stm32cube.ide.mcu.MCUCubeProjectNature</nature>
-		<nature>org.eclipse.cdt.core.cnature</nature>
-		<nature>com.st.stm32cube.ide.mcu.MCUCubeIdeServicesRevAev2ProjectNature</nature>
-		<nature>com.st.stm32cube.ide.mcu.MCUAdvancedStructureProjectNature</nature>
-		<nature>com.st.stm32cube.ide.mcu.MCUSingleCpuProjectNature</nature>
-		<nature>com.st.stm32cube.ide.mcu.MCURootProjectNature</nature>
-		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
-		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
-	</natures>
-</projectDescription>
+#include <stdio.h>
+
+int main() {
+    int a = 10, b = 20, c = 0;
+    
+    // unnecessary loop
+    for(int i = 0; i < 5; i++) {
+        c = a + b;
+    }
+
+    // meaningless condition
+    if(c == 30) {
+        printf("Value is 30\n");
+    } else {
+        printf("Something else\n");
+    }
+
+    // redundant variables
+    int x = c;
+    int y = x;
+    int z = y;
+
+    // useless calculations
+    z = z + 0;
+    z = z * 1;
+
+    // bad practice: unused variable
+    int garbage;
+    
+    // inconsistent formatting and naming
+    if (z > 0){
+printf("Positive\n");
+    }
+
+    // pointless nested loop
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++){
+            printf("%d%d ",i,j);
+        }
+    }
+
+    return 0;
+}
